@@ -5,8 +5,19 @@ import os
 import tkinter as tk
 from tkinter import filedialog
 from PIL import ImageTk, Image
+from tkinter import ttk
 import time
 import io
+
+# Добавить текст
+def insert_text(text):
+    text_widget.delete("1.0", tk.END)
+    text_widget.insert(tk.END, text + '\n')
+
+# Получить текст 
+def get_text():
+    content = text_widget.get("1.0", tk.END)
+    return content
 
 # Функцию для отображения превью
 def show_image_for_time(image_data, duration):
@@ -125,6 +136,8 @@ def select_file():
     file_path = filedialog.askopenfilename()
     entry_file.delete(0, tk.END)
     entry_file.insert(0, file_path)
+    text = read_file(file_path)
+    insert_text(text)
 
 # Обработка файла
 def process_file():
@@ -135,12 +148,16 @@ def process_file():
 
     if(method == 'Шифровать'):
         crypt(file_path, key)
+        text = read_file(file_path+'.shtr')
+        insert_text(text)
         label_result.config(text='Файл успешно зашифрован!')
     else:
         decrypted_text = decrypt(file_path,key)
         if(decrypted_text == 'Invalid key'):
             label_result.config(text='Неверный ключь для расшифровки!')
         else:
+            text = read_file(file_path[:-5])
+            insert_text(text)
             label_result.config(text='Файл успешно расшифрован!')
 
 # Првеью в BASE64
@@ -177,6 +194,22 @@ label_key.grid(row=0, column=0)
 
 entry_key = tk.Entry(frame_key, width=50, highlightbackground="#C33228", highlightthickness=1)
 entry_key.grid(row=0, column=1)
+
+
+# Создание фрейма для размещения текстового виджета и скроллбара
+frame_area = ttk.Frame(root)
+frame_area.pack(fill=tk.BOTH, expand=True)
+
+# Создание текстового виджета с высотой 10 строк
+text_widget = tk.Text(frame_area, wrap=tk.WORD, height=10)
+text_widget.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
+
+# Создание скроллбара
+scrollbar = ttk.Scrollbar(frame_area, orient=tk.VERTICAL, command=text_widget.yview)
+scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
+
+# Связывание текстового виджета со скроллбаром
+text_widget.config(yscrollcommand=scrollbar.set)
 
 # Фрейм для выбора метода обработки
 frame_method = tk.Frame(root)
