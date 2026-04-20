@@ -1,6 +1,6 @@
 # Shiftaker — Symmetric File Encryption Tool
 
-![Banner](https://raw.githubusercontent.com/A01L/Shiftaker/info.png)
+![Banner](https://github.com/A01L/Shiftaker/blob/main/info.png)
 
 **Shiftaker** — это графическое приложение (GUI) на Python для надежного шифрования и дешифрования файлов с использованием алгоритмов симметричного шифрования. Программа позволяет защитить любой файл паролем, превращая его в защищенный формат `.shtr`.
 
